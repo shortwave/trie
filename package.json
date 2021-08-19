@@ -1,0 +1,58 @@
+{
+  "name": "@shortwave/trie",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test",
+    "lint": "tsdx lint",
+    "prepare": "tsdx build",
+    "prepack": "tsdx build",
+    "size": "size-limit",
+    "analyze": "size-limit --why",
+    "benchmark": "tsdx build && NODE_ENV=production 0x -o ./test/benchmark"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "module": "dist/trie.esm.js",
+  "size-limit": [
+    {
+      "path": "dist/trie.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/trie.esm.js",
+      "limit": "10 KB"
+    }
+  ],
+  "devDependencies": {
+    "@size-limit/preset-small-lib": "^5.0.3",
+    "@types/benchmark": "^2.1.1",
+    "0x": "^4.10.2",
+    "benchmark": "^2.1.4",
+    "husky": "^7.0.1",
+    "size-limit": "^5.0.3",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.3.1",
+    "typescript": "^3.9.10"
+  }
+}
