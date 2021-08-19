@@ -310,10 +310,12 @@ describe('Trie', () => {
 
     expect(t.prefixSearch('')).toEqual(['a', 'b']);
     t.remove('a');
+    t.validateInvariants();
     expect(t.prefixSearch('')).toEqual(['b']);
     expect(t.prefixSearch('b')).toEqual(['b']);
     expect(t.prefixSearch('a')).toEqual([]);
     t.remove('b');
+    t.validateInvariants();
     expect(t.prefixSearch('')).toEqual([]);
     expect(t.prefixSearch('b')).toEqual([]);
     expect(t.prefixSearch('a')).toEqual([]);
@@ -336,13 +338,17 @@ describe('Trie', () => {
 
     expect(t.prefixSearch('')).toEqual(['b', 'a']);
     t.remove('a');
+    t.validateInvariants();
     expect(t.prefixSearch('')).toEqual(['b']);
     t.add({
       key: 'a',
       score: 3,
       value: 'a',
     });
+    t.validateInvariants();
     expect(t.prefixSearch('')).toEqual(['a', 'b']);
+    t.remove('a');
+    t.validateInvariants();
   });
 
   it('randomized test', () => {

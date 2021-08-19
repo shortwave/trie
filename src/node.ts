@@ -155,6 +155,13 @@ class Node<T> {
       const child = this.children[chr];
       if (!child) return;
       child.remove(key, index + 1);
+      let max = 0;
+      for (let i = 0; i < this.values.length; ++i) {
+        const chr = this.values[i] as string;
+        const child = this.children[chr];
+        max = Math.max(child.score, max);
+      }
+      this.score = max;
       this.sorted = false; // Our sort could be invalidated.
     }
   }
