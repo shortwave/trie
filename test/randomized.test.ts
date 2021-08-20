@@ -112,7 +112,7 @@ describe('Trie Choas Monkey', () => {
           const k = s.sampleKey();
           return {
             type: opType,
-            limit: random(0, 1000),
+            limit: random(1, 1000),
             unique: sample([true, false])!,
             prefix: k.substr(0, random(0, k.length)),
           };
