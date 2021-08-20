@@ -65,7 +65,7 @@ class Trie<T> {
    * The limit is particularly important because the performance of the
    * algorithm is determined primarily by the limit.
    */
-  prefixSearch(prefix: string, opts?: Partial<SearchOptions>) {
+  prefixSearch(prefix: string, opts?: Partial<SearchOptions>): T[] {
     const results: T[] = [];
     const node = this.root.findPrefix(prefix, 0);
 

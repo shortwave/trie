@@ -1,8 +1,27 @@
-import Trie from '../src/index';
+import Trie, { SearchOptions, Item } from '../src/index';
+
+/** A trie that strictly validates it's invariants after every operation. */
+class StrictTrie<T> extends Trie<T> {
+  add(item: Item<T>) {
+    super.add(item);
+    this.validateInvariants();
+  }
+
+  remove(key: string) {
+    super.remove(key);
+    this.validateInvariants();
+  }
+
+  prefixSearch(prefix: string, opts?: Partial<SearchOptions>): T[] {
+    const result = super.prefixSearch(prefix, opts);
+    this.validateInvariants();
+    return result;
+  }
+}
 
 describe('Trie', () => {
   it('should allow value retrieval', () => {
-    const t = new Trie();
+    const t = new StrictTrie();
 
     const item = {
       key: 'one',
@@ -39,7 +58,7 @@ describe('Trie', () => {
       score: 1,
     };
 
-    const t = new Trie();
+    const t = new StrictTrie();
 
     t.add(aaa);
     t.add(aab);
@@ -50,7 +69,7 @@ describe('Trie', () => {
   });
 
   it('should be able to find a limited set of results', () => {
-    const t = new Trie();
+    const t = new StrictTrie();
 
     t.add({
       key: 'aaa',
@@ -81,9 +100,9 @@ describe('Trie', () => {
   });
 
   it('should return an empty array if nothing is found', () => {
-    expect(new Trie().prefixSearch('a')).toEqual([]);
+    expect(new StrictTrie().prefixSearch('a')).toEqual([]);
 
-    const t = new Trie();
+    const t = new StrictTrie();
     t.add({
       key: 'gaa',
       value: 2,
@@ -94,7 +113,7 @@ describe('Trie', () => {
   });
 
   it('should return the highest scoring match of duplicates', () => {
-    const t = new Trie();
+    const t = new StrictTrie();
     t.add({
       key: 'abc',
       value: 2,
@@ -111,7 +130,7 @@ describe('Trie', () => {
   });
 
   it('should be able to prefix match with tails', () => {
-    const t = new Trie();
+    const t = new StrictTrie();
     t.add({
       key: 'sarah',
       value: 1,
@@ -128,7 +147,7 @@ describe('Trie', () => {
   });
 
   it('should be able to unique even if multiple values have the same score', () => {
-    const t = new Trie();
+    const t = new StrictTrie();
 
     t.add({
       key: 'abc',
@@ -152,7 +171,7 @@ describe('Trie', () => {
   });
 
   it('should be able to distinguish between distinct keys', () => {
-    const t = new Trie();
+    const t = new StrictTrie();
 
     t.add({
       key: 'aaa',
@@ -172,7 +191,7 @@ describe('Trie', () => {
   });
 
   it('should be able to distinguish between distinct keys', () => {
-    const t = new Trie();
+    const t = new StrictTrie();
 
     t.add({
       key: 'aaa',
@@ -199,7 +218,7 @@ describe('Trie', () => {
   });
 
   it('should work on prefixes', () => {
-    const t = new Trie({ maxWidth: 1 });
+    const t = new StrictTrie({ maxWidth: 1 });
 
     t.add({
       key: 'a',
@@ -220,81 +239,10 @@ describe('Trie', () => {
     expect(t.prefixSearch('a')).toEqual([3, 2, 1]);
     expect(t.prefixSearch('aa')).toEqual([3, 2]);
     expect(t.prefixSearch('aaa')).toEqual([3]);
-
-    t.validateInvariants();
   });
 
-  it('should work on larger tries', () => {
-    interface Contact {
-      readonly email: string;
-      readonly name: string;
-      readonly score: number;
-    }
-    const contacts = require('./contacts.json') as Contact[];
-
-    const t = new Trie<Contact>();
-
-    for (const contact of contacts) {
-      t.add({
-        key: contact.email,
-        distinct: contact.email + contact.name,
-        score: contact.score,
-        value: contact,
-      });
-
-      t.add({
-        key: contact.name.toLowerCase(),
-        distinct: contact.email + contact.name,
-        score: contact.score,
-        value: contact,
-      });
-    }
-
-    t.validateInvariants();
-
-    let results = t.prefixSearch('t', { limit: 5 });
-    expect(results.map(result => result.email)).toEqual([
-      'tellus.Nunc.lectus@ullamcorpereu.org',
-      'risus.at.fringilla@Fusce.com',
-      'tortor@Cras.org',
-      'tortor@penatibusetmagnis.com',
-      'tellus.Nunc.lectus@ligulaeuenim.com',
-    ]);
-
-    t.validateInvariants();
-
-    results = t.prefixSearch('sh', { limit: 5 });
-    expect(results.map(result => result.email)).toEqual([
-      'ornare@acrisus.co.uk',
-      'a.ultricies@a.com',
-      'Etiam.bibendum@necquam.org',
-      'orci.adipiscing.non@euligulaAenean.net',
-      'mi.tempor.lorem@scelerisquedui.ca',
-    ]);
-
-    t.validateInvariants();
-
-    results = t.prefixSearch('rap', { limit: 5 });
-    expect(results.map(result => result.email)).toEqual([
-      'velit.justo@nonegestas.net',
-      'Fusce.aliquet.magna@esttemporbibendum.net',
-      'auctor.velit.eget@risusDuisa.co.uk',
-      'vehicula.Pellentesque.tincidunt@leoelementumsem.com',
-      'arcu.vel@velitinaliquet.net',
-    ]);
-
-    t.validateInvariants();
-
-    results = t.prefixSearch('zachary ba', { limit: 5 });
-    expect(results.map(result => result.email)).toEqual([
-      'blandit@duiFuscediam.ca',
-    ]);
-
-    t.validateInvariants();
-  }, 5000);
-
   it('can delete values', () => {
-    const t = new Trie();
+    const t = new StrictTrie();
 
     t.add({
       key: 'a',
@@ -310,19 +258,17 @@ describe('Trie', () => {
 
     expect(t.prefixSearch('')).toEqual(['a', 'b']);
     t.remove('a');
-    t.validateInvariants();
     expect(t.prefixSearch('')).toEqual(['b']);
     expect(t.prefixSearch('b')).toEqual(['b']);
     expect(t.prefixSearch('a')).toEqual([]);
     t.remove('b');
-    t.validateInvariants();
     expect(t.prefixSearch('')).toEqual([]);
     expect(t.prefixSearch('b')).toEqual([]);
     expect(t.prefixSearch('a')).toEqual([]);
   });
 
   it('can replace values', () => {
-    const t = new Trie();
+    const t = new StrictTrie();
 
     t.add({
       key: 'a',
@@ -338,20 +284,13 @@ describe('Trie', () => {
 
     expect(t.prefixSearch('')).toEqual(['b', 'a']);
     t.remove('a');
-    t.validateInvariants();
     expect(t.prefixSearch('')).toEqual(['b']);
     t.add({
       key: 'a',
       score: 3,
       value: 'a',
     });
-    t.validateInvariants();
     expect(t.prefixSearch('')).toEqual(['a', 'b']);
     t.remove('a');
-    t.validateInvariants();
-  });
-
-  it('randomized test', () => {
-    // TODO(rockwood): implement me
   });
 });
