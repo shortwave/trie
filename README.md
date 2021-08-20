@@ -1,5 +1,7 @@
 A fast weighted auto-completion trie.
 
+<a href="https://badge.fury.io/js/%40shortwave%2Ftrie"><img src="https://badge.fury.io/js/%40shortwave%2Ftrie.svg" alt="npm version" height="18"></a>
+
 Usage
 =====
 
