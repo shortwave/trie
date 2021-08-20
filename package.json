@@ -4,10 +4,8 @@
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
-  "files": [
-    "dist",
-    "src"
-  ],
+  "module": "dist/trie.esm.js",
+  "files": ["dist"],
   "engines": {
     "node": ">=10"
   },
@@ -33,7 +31,6 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "module": "dist/trie.esm.js",
   "size-limit": [
     {
       "path": "dist/trie.cjs.production.min.js",
