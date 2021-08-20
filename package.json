@@ -6,19 +6,23 @@
   "typings": "dist/index.d.ts",
   "module": "dist/trie.esm.js",
   "files": ["dist"],
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=10"
   },
   "scripts": {
-    "start": "tsdx watch",
-    "build": "tsdx build",
-    "test": "tsdx test",
-    "lint": "tsdx lint",
-    "prepare": "tsdx build",
-    "prepack": "tsdx build",
-    "size": "size-limit",
     "analyze": "size-limit --why",
-    "benchmark": "tsdx build && NODE_ENV=production 0x -o ./test/benchmark"
+    "benchmark": "npm run build && NODE_ENV=production 0x -o ./test/benchmark",
+    "build": "tsdx build",
+    "lint": "tsdx lint",
+    "prepack": "tsdx build",
+    "prepare": "tsdx build",
+    "release": "np",
+    "size": "size-limit",
+    "start": "tsdx watch",
+    "test": "tsdx test"
   },
   "husky": {
     "hooks": {
