@@ -1,5 +1,4 @@
 import Node from './node';
-import PQueue from './pqueue';
 import { Item, SearchOptions } from './common';
 
 interface TrieOptions {
@@ -78,7 +77,7 @@ class Trie<T> {
       limit: opts?.limit ?? Number.POSITIVE_INFINITY,
     };
 
-    node.getSortedResults(prefix, results, options, new PQueue(options.limit));
+    node.getSortedResults(prefix, results, options);
 
     return results;
   }

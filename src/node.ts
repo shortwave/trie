@@ -196,7 +196,6 @@ class Node<T> {
     prefix: string,
     results: Array<T>,
     opts: SearchOptions,
-    pqueue: PQueue<T>
   ) {
     const seenKeys = new Set<string>();
 
@@ -218,7 +217,8 @@ class Node<T> {
         }
       }
     } else {
-      pqueue.addList([this]);
+      const pqueue = new PQueue<T>();
+      pqueue.addAll([this]);
 
       let next: Node<T> | Item<T> | undefined;
       while ((next = pqueue.pop())) {
@@ -228,10 +228,10 @@ class Node<T> {
           }
 
           if (next.leaf) {
-            pqueue.addList(next.values as Array<Item<T>>);
+            pqueue.addAll(next.values as Array<Item<T>>);
           } else {
             const children = next.children;
-            pqueue.addList((next.values as Letter[]).map(v => children[v]));
+            pqueue.addAll((next.values as Letter[]).map(v => children[v]));
           }
         } else {
           if (!opts.unique || !seenKeys.has(next.distinct || next.key)) {

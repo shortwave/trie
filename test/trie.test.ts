@@ -293,4 +293,27 @@ describe('Trie', () => {
     expect(t.prefixSearch('')).toEqual(['a', 'b']);
     t.remove('a');
   });
+
+  it('distinct limit bug', () => {
+    const t = new StrictTrie({maxWidth: 1});
+    t.add({
+      key: 'a',
+      score: 1,
+      value: 'a',
+      distinct: '1',
+    });
+    t.add({
+      key: 'b',
+      score: 1,
+      value: 'b',
+      distinct: '1',
+    });
+    t.add({
+      key: 'c',
+      score: 1,
+      value: 'c',
+      distinct: '2',
+    });
+    expect(t.prefixSearch("", {limit: 2, unique: true})).toEqual(['a', 'c']);
+  })
 });
