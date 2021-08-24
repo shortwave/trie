@@ -44,12 +44,14 @@ class Trie<T> {
   }
 
   /**
-   * Remove all items with this key from the auto-completer
+   * Remove all items with this key and distinct properties from the auto-completer.
    *
-   * @param key the key to remove.
+   * The key and distinct properties must both match exactly in order to remove an element from the trie.
+   *
+   * @param target the key and distinct to remove.
    */
-  remove(key: string) {
-    this.root.remove(key, 0);
+  remove(target: Pick<Item<never>, 'key'|'distinct'>) {
+    this.root.remove(target, 0);
   }
 
   /**

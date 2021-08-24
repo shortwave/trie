@@ -7,8 +7,8 @@ class StrictTrie<T> extends Trie<T> {
     this.validateInvariants();
   }
 
-  remove(key: string) {
-    super.remove(key);
+  remove(target: Pick<Item<never>, 'key' | 'distinct'>) {
+    super.remove(target);
     this.validateInvariants();
   }
 
@@ -257,11 +257,11 @@ describe('Trie', () => {
     });
 
     expect(t.prefixSearch('')).toEqual(['a', 'b']);
-    t.remove('a');
+    t.remove({key: 'a'});
     expect(t.prefixSearch('')).toEqual(['b']);
     expect(t.prefixSearch('b')).toEqual(['b']);
     expect(t.prefixSearch('a')).toEqual([]);
-    t.remove('b');
+    t.remove({key: 'b'});
     expect(t.prefixSearch('')).toEqual([]);
     expect(t.prefixSearch('b')).toEqual([]);
     expect(t.prefixSearch('a')).toEqual([]);
@@ -283,7 +283,7 @@ describe('Trie', () => {
     });
 
     expect(t.prefixSearch('')).toEqual(['b', 'a']);
-    t.remove('a');
+    t.remove({key: 'a'});
     expect(t.prefixSearch('')).toEqual(['b']);
     t.add({
       key: 'a',
@@ -291,7 +291,7 @@ describe('Trie', () => {
       value: 'a',
     });
     expect(t.prefixSearch('')).toEqual(['a', 'b']);
-    t.remove('a');
+    t.remove({key: 'a'});
   });
 
   it('distinct limit bug', () => {
@@ -315,5 +315,23 @@ describe('Trie', () => {
       distinct: '2',
     });
     expect(t.prefixSearch("", {limit: 2, unique: true})).toEqual(['a', 'c']);
-  })
+  });
+
+  it('removes exact distinct matches', () => {
+    const t = new StrictTrie({maxWidth: 1});
+    t.add({
+      key: 'a',
+      score: 1,
+      value: 'a',
+      distinct: '1',
+    });
+    t.remove({key: 'a'})
+    expect(t.prefixSearch("")).toEqual(['a']);
+    t.remove({key: 'a', distinct: '2'})
+    expect(t.prefixSearch("")).toEqual(['a']);
+    t.remove({key: 'b', distinct: '1'})
+    expect(t.prefixSearch("")).toEqual(['a']);
+    t.remove({key: 'a', distinct: '1'})
+    expect(t.prefixSearch("")).toEqual([]);
+  });
 });

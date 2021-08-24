@@ -138,11 +138,11 @@ class Node<T> {
     this.sorted = false;
   }
 
-  remove(key: string, index: number) {
+  remove(target: Pick<Item<never>, 'key'|'distinct'>, index: number) {
     if (this.leaf) {
       let max = 0;
       filterInPlace(this.values as Item<T>[], item => {
-        const keep = item.key !== key;
+        const keep = item.key !== target.key || item.distinct !== target.distinct;
         if (keep) {
           max = Math.max(item.score, max);
         }
@@ -151,10 +151,10 @@ class Node<T> {
       this.score = max;
       // We're still sorted by score
     } else {
-      const chr = key[index] || '';
+      const chr = target.key[index] || '';
       const child = this.children[chr];
       if (!child) return;
-      child.remove(key, index + 1);
+      child.remove(target, index + 1);
       let max = 0;
       for (let i = 0; i < this.values.length; ++i) {
         const chr = this.values[i] as string;
