@@ -40,6 +40,10 @@ trie.add({
 // (the trie can store multiple values per key)
 trie.prefixSearch('r', {limit: 3, unique: true})
 //=> [{name: "Richard", ...} , {name: "Rachael", ...}]
+
+
+// You can also remove nodes from the tree.
+trie.remove({key: "sarah"});
 ```
 
 Efficiency
