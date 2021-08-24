@@ -138,11 +138,12 @@ class Node<T> {
     this.sorted = false;
   }
 
-  remove(target: Pick<Item<never>, 'key'|'distinct'>, index: number) {
+  remove(target: Pick<Item<never>, 'key' | 'distinct'>, index: number) {
     if (this.leaf) {
       let max = 0;
       filterInPlace(this.values as Item<T>[], item => {
-        const keep = item.key !== target.key || item.distinct !== target.distinct;
+        const keep =
+          item.key !== target.key || item.distinct !== target.distinct;
         if (keep) {
           max = Math.max(item.score, max);
         }
@@ -192,11 +193,7 @@ class Node<T> {
    * We use the passed in pqueue which has a limit and unique flag to
    * configure the search.
    */
-  getSortedResults(
-    prefix: string,
-    results: Array<T>,
-    opts: SearchOptions,
-  ) {
+  getSortedResults(prefix: string, results: Array<T>, opts: SearchOptions) {
     const seenKeys = new Set<string>();
 
     if (this.leaf) {

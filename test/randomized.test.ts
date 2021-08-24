@@ -157,7 +157,7 @@ describe('Trie Choas Monkey', () => {
         }
         case 'remove': {
           s.remove(op.key);
-          t.remove({key: op.key});
+          t.remove({ key: op.key });
           t.validateInvariants();
           break;
         }

@@ -50,7 +50,7 @@ class Trie<T> {
    *
    * @param target the key and distinct to remove.
    */
-  remove(target: Pick<Item<never>, 'key'|'distinct'>) {
+  remove(target: Pick<Item<never>, 'key' | 'distinct'>) {
     this.root.remove(target, 0);
   }
 
