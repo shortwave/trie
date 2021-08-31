@@ -17,6 +17,7 @@
   "scripts": {
     "analyze": "size-limit --why",
     "benchmark": "npm run build && NODE_ENV=production 0x -o ./test/benchmark",
+    "benchmark-flatList": "npm run build && NODE_ENV=production 0x -o ./test/flatListBenchmark",
     "build": "tsdx build",
     "lint": "tsdx lint",
     "prepack": "tsdx build",

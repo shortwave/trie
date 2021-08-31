@@ -1,5 +1,6 @@
 import Node from './node';
 import { Item, SearchOptions } from './common';
+import FlatList from './flatList';
 import { roughSizeOfObject } from './utils';
 
 interface TrieOptions {
@@ -86,4 +87,11 @@ class Trie<T> {
   }
 }
 
-export { Trie as default, Item, TrieOptions, SearchOptions, roughSizeOfObject };
+export {
+  Trie as default,
+  Item,
+  TrieOptions,
+  SearchOptions,
+  FlatList,
+  roughSizeOfObject,
+};
