@@ -19,6 +19,8 @@
     "benchmark": "npm run build && NODE_ENV=production 0x -o ./test/benchmark",
     "benchmark-flatList": "npm run build && NODE_ENV=production 0x -o ./test/flatListBenchmark",
     "benchmark-suffixTree": "npm run build && NODE_ENV=production 0x -o ./test/suffixTreeBenchmark",
+    "benchmark-lunr": "npm run build && NODE_ENV=production 0x -o ./test/lunrBenchmark",
+    "benchmark-elasticlunr": "npm run build && NODE_ENV=production 0x -o ./test/elasticlunrBenchmark",
     "build": "tsdx build",
     "lint": "tsdx lint",
     "prepack": "tsdx build",
@@ -63,7 +65,9 @@
     "size-limit": "^5.0.3",
     "tsdx": "^0.14.1",
     "tslib": "^2.3.1",
-    "typescript": "^3.9.10"
+    "typescript": "^3.9.10",
+    "lunr": "^2.3.9",
+    "elasticlunr": "^0.9.5"
   },
   "repository": "github:shortwave/trie"
 }
