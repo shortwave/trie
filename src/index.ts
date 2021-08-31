@@ -1,5 +1,6 @@
 import Node from './node';
 import { Item, SearchOptions } from './common';
+import { roughSizeOfObject } from './utils';
 
 interface TrieOptions {
   readonly maxWidth: number;
@@ -85,4 +86,4 @@ class Trie<T> {
   }
 }
 
-export { Trie as default, Item, TrieOptions, SearchOptions };
+export { Trie as default, Item, TrieOptions, SearchOptions, roughSizeOfObject };
