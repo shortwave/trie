@@ -243,6 +243,39 @@ class Node<T> {
     }
   }
 
+  /*
+   * Look at only the results from this node (or the empty string node this one
+   * contains) for exact matched of the query.
+   *
+   * We use the passed in pqueue which has a limit and unique flag to
+   * configure the search.
+   */
+  getSortedExactResults(query: string, results: Array<T>, opts: SearchOptions) {
+    const seenKeys = new Set<string>();
+
+    if (!this.leaf) {
+      this.children['']?.getSortedExactResults(query, results, opts);
+      return;
+    }
+
+    if (!this.sorted) {
+      this.sort();
+    }
+
+    for (let i = 0; i < this.values.length; i++) {
+      const item = this.values[i] as Item<T>;
+      if (item.key === query) {
+        if (!opts.unique || !seenKeys.has(item.distinct || item.key)) {
+          seenKeys.add(item.distinct || item.key);
+          results.push(item.value);
+          if (results.length === opts.limit) {
+            return;
+          }
+        }
+      }
+    }
+  }
+
   private sort(): void {
     if (this.sorted) {
       return;

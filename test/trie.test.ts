@@ -334,4 +334,128 @@ describe('Trie', () => {
     t.remove({ key: 'a', distinct: '1' });
     expect(t.prefixSearch('')).toEqual([]);
   });
+
+  describe('exact match', () => {
+    it('does not match prefixes', () => {
+      const t = new StrictTrie();
+      t.add({ key: 'a', score: 1, value: 'a' });
+      t.add({ key: 'aa', score: 1, value: 'aa' });
+      t.add({ key: 'aaa', score: 1, value: 'aaa' });
+      expect(t.exactSearch('')).toEqual([]);
+      expect(t.exactSearch('a')).toEqual(['a']);
+      expect(t.exactSearch('aa')).toEqual(['aa']);
+      expect(t.exactSearch('aaa')).toEqual(['aaa']);
+    });
+
+    it('should return an empty array if nothing is found', () => {
+      expect(new StrictTrie().prefixSearch('a')).toEqual([]);
+
+      const t = new StrictTrie();
+      t.add({ key: 'gaa', value: 2, score: 2 });
+      expect(t.exactSearch('gb')).toEqual([]);
+    });
+
+    it('should sort values by score', () => {
+      const t = new StrictTrie();
+      [
+        { key: 'a', value: 2, score: 2 },
+        { key: 'a', value: 4, score: 4 },
+        { key: 'a', value: 3, score: 3 },
+        { key: 'a', value: 1, score: 1 },
+      ].forEach(item => t.add(item));
+
+      expect(t.exactSearch('a')).toEqual([4, 3, 2, 1]);
+    });
+
+    it('should be able to find a limited set of results', () => {
+      const t = new StrictTrie();
+      [
+        { key: 'a', value: 4, score: 4 },
+        { key: 'a', value: 3, score: 3 },
+        { key: 'a', value: 2, score: 2 },
+        { key: 'a', value: 1, score: 1 },
+      ].forEach(item => t.add(item));
+
+      expect(t.exactSearch('a', { limit: 3, unique: false })).toEqual([
+        4,
+        3,
+        2,
+      ]);
+
+      t.add({ key: 'a', score: 0, value: 0 });
+      expect(t.exactSearch('a', { limit: 3, unique: false })).toEqual([
+        4,
+        3,
+        2,
+      ]);
+
+      t.add({ key: 'a', score: 5, value: 5 });
+      expect(t.exactSearch('a', { limit: 3, unique: false })).toEqual([
+        5,
+        4,
+        3,
+      ]);
+
+      expect(t.exactSearch('a', { limit: 4, unique: false })).toEqual([
+        5,
+        4,
+        3,
+        2,
+      ]);
+      expect(t.exactSearch('a', { limit: undefined, unique: false })).toEqual([
+        5,
+        4,
+        3,
+        2,
+        1,
+        0,
+      ]);
+      expect(t.exactSearch('a', { limit: 1, unique: false })).toEqual([5]);
+    });
+
+    it('should return the highest scoring match of duplicates', () => {
+      const t = new StrictTrie();
+      t.add({ key: 'abc', value: 2, score: 2 });
+      t.add({ key: 'abc', value: 4, score: 4 });
+
+      expect(t.exactSearch('abc', { limit: 1 })).toEqual([4]);
+    });
+
+    it('should be able to distinguish between distinct keys', () => {
+      const t = new StrictTrie();
+      t.add({ key: 'aaa', distinct: 'b', score: 1, value: 1 });
+      t.add({ key: 'aaa', distinct: 'b', score: 3, value: 3 });
+      t.add({ key: 'aaa', distinct: 'c', score: 2, value: 2 });
+
+      expect(t.exactSearch('aaa', { unique: true })).toEqual([3, 2]);
+    });
+
+    it('removing a key', () => {
+      const t = new StrictTrie();
+      t.add({ key: 'a', score: 1, value: 'a' });
+      t.add({ key: 'aa', score: 1, value: 'aa' });
+      expect(t.exactSearch('')).toEqual([]);
+      expect(t.exactSearch('a')).toEqual(['a']);
+      expect(t.exactSearch('aa')).toEqual(['aa']);
+
+      t.remove({ key: 'a' });
+      expect(t.exactSearch('a')).toEqual([]);
+      expect(t.exactSearch('aa')).toEqual(['aa']);
+    });
+
+    it('can replace values', () => {
+      const t = new StrictTrie();
+      t.add({ key: 'a', value: 1, score: 1, distinct: '1' });
+      t.add({ key: 'a', value: 2, score: 2, distinct: '2' });
+      expect(t.exactSearch('a')).toEqual([2, 1]);
+
+      t.remove({ key: 'a', distinct: '1' });
+      expect(t.exactSearch('a')).toEqual([2]);
+
+      t.add({ key: 'a', value: 1, score: 3, distinct: '1' });
+      expect(t.exactSearch('a')).toEqual([1, 2]);
+
+      t.remove({ key: 'a', distinct: '1' });
+    });
+  });
 });

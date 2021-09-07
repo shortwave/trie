@@ -83,6 +83,34 @@ class Trie<T> {
 
     return results;
   }
+
+  /**
+   * Returns an array of values that have keys matching the query exactly.
+   *
+   * You are encouraged to pass an options object with:
+   * a .limit to limit the number of results returned.
+   * a .unique property if you only want one result per-key.
+   *
+   * The limit is particularly important because the performance of the
+   * algorithm is determined primarily by the limit.
+   */
+  exactSearch(query: string, opts?: Partial<SearchOptions>): T[] {
+    const results: T[] = [];
+    const node = this.root.findPrefix(query, 0);
+
+    if (!node) {
+      return results;
+    }
+
+    const options: SearchOptions = {
+      unique: opts?.unique ?? false,
+      limit: opts?.limit ?? Number.POSITIVE_INFINITY,
+    };
+
+    node.getSortedExactResults(query, results, options);
+
+    return results;
+  }
 }
 
 export { Trie as default, Item, TrieOptions, SearchOptions };
