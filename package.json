@@ -19,7 +19,8 @@
     "release": "np",
     "build": "vite build",
     "bench": "vitest bench",
-    "test": "vitest"
+    "test": "vitest run",
+    "dev": "vitest"
   },
   "prettier": {
     "printWidth": 80,
