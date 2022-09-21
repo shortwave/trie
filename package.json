@@ -1,6 +1,6 @@
 {
   "name": "@shortwave/trie",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "license": "MIT",
   "main": "dist/trie.cjs",
   "typings": "dist/index.d.ts",
