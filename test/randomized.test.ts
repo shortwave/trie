@@ -1,3 +1,4 @@
+import {describe, it, expect} from 'vitest';
 import Trie, { Item, SearchOptions } from '../src/index';
 import seedrandom from 'seedrandom';
 import {

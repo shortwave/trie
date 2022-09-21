@@ -1,5 +1,5 @@
 import Node from './node';
-import { Item, SearchOptions } from './common';
+import type { Item, SearchOptions } from './common';
 
 interface TrieOptions {
   readonly maxWidth: number;

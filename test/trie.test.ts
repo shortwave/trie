@@ -1,3 +1,4 @@
+import {describe, it, expect} from 'vitest';
 import Trie, { SearchOptions, Item } from '../src/index';
 
 /** A trie that strictly validates it's invariants after every operation. */
