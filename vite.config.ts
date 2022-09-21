@@ -25,7 +25,8 @@ export default defineConfig({
       },
     },
     sourcemap: true,
-    target: 'es6',
+    // Let the consumer of the node_module set the target.
+    target: 'esnext',
     minify: false,
   },
 });

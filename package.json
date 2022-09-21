@@ -16,7 +16,9 @@
     "node": ">=14"
   },
   "scripts": {
-    "build": "vite build"
+    "build": "vite build",
+    "bench": "vitest bench",
+    "test": "vitest"
   },
   "prettier": {
     "printWidth": 80,
