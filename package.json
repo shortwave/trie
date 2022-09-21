@@ -16,6 +16,7 @@
     "node": ">=14"
   },
   "scripts": {
+    "release": "np",
     "build": "vite build",
     "bench": "vitest bench",
     "test": "vitest"
@@ -29,6 +30,7 @@
   "repository": "github:shortwave/trie",
   "devDependencies": {
     "lodash": "^4.17.21",
+    "np": "^7.6.2",
     "seedrandom": "^3.0.5",
     "typescript": "^4.8.3",
     "vite": "^3.1.3",
